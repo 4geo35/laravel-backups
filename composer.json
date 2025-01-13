@@ -1,0 +1,32 @@
+{
+    "name": "4geo35/laravel-backups",
+    "description": "Backup db and storage with sending to aws",
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladimir",
+            "email": "aweram-team@yandex.ru"
+        }
+    ],
+    "require": {
+        "aws/aws-sdk-php": "^3.336",
+        "league/flysystem-aws-s3-v3": "^3.29",
+        "4geo35/user-management": "@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "GIS\\LaravelBackups\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "GIS\\LaravelBackups\\LaravelBackupsServiceProvider"
+            ]
+        }
+    }
+}
