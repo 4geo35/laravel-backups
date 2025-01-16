@@ -2,12 +2,16 @@
 
 namespace GIS\LaravelBackups;
 
+use GIS\LaravelBackups\Console\Commands\BackupDataBaseCommand;
 use Illuminate\Support\ServiceProvider;
 
 class LaravelBackupsServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        $this->commands([
+            BackupDataBaseCommand::class,
+        ]);
         // Export config
         $this->publishes([
             __DIR__ . "/config/laravel-backups.php" => config_path("laravel-backups.php")
