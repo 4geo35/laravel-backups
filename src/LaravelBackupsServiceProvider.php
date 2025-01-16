@@ -3,7 +3,9 @@
 namespace GIS\LaravelBackups;
 
 use GIS\LaravelBackups\Console\Commands\BackupDataBaseCommand;
+use GIS\LaravelBackups\Console\Commands\BackupStorageCommand;
 use GIS\LaravelBackups\Console\Commands\RestoreDataBaseCommand;
+use GIS\LaravelBackups\Helpers\ZipActionsManager;
 use Illuminate\Support\ServiceProvider;
 
 class LaravelBackupsServiceProvider extends ServiceProvider
@@ -13,6 +15,8 @@ class LaravelBackupsServiceProvider extends ServiceProvider
         $this->commands([
             BackupDataBaseCommand::class,
             RestoreDataBaseCommand::class,
+
+            BackupStorageCommand::class,
         ]);
         // Export config
         $this->publishes([
@@ -39,5 +43,9 @@ class LaravelBackupsServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__ . "/config/laravel-backups.php", "laravel-backups"
         );
+        // Facades
+        $this->app->singleton("zip-actions", function () {
+            return new ZipActionsManager;
+        });
     }
 }
