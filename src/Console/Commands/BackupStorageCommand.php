@@ -47,7 +47,7 @@ class BackupStorageCommand extends Command
         }
         try {
             $handle = opendir(backup_storage_path());
-            $exceptionItems = ["livewire-tmp", ".gitignore"];
+            $exceptionItems = config("laravel-backups.exceptionItems");
             if (config("fileable.thumbFolder")) $exceptionItems[] = config("fileable.thumbFolder");
             while (false !== ($entry = readdir($handle))) {
                 if (!in_array($entry, $exceptionItems) && $entry !== "." && $entry !== "..") {

@@ -12,6 +12,8 @@ class ZipActionsManager
     private $zipArchive = null;
     private ?string $path = null;
     private string $skip_mode = 'NONE';
+    private int $mask = 0777;
+    private ?string $password = null;
     private static array $zipStatusCodes = [
         ZipArchive::ER_OK => 'No error',
         ZipArchive::ER_MULTIDISK => 'Multi-disk zip archives not supported',
@@ -48,7 +50,13 @@ class ZipActionsManager
 
     public function open(string $zipFile)
     {
+        try {
+            $this->setArchive(self::openZipFile($zipFile));
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
 
+        return $this;
     }
 
     /**
@@ -133,9 +141,69 @@ class ZipActionsManager
         }
     }
 
+    /**
+     * @param $destination
+     * @param $files
+     * @return true
+     * @throws \Exception
+     */
+    public function extract($destination, $files = null): true
+    {
+        if (empty($destination)) {
+            throw new \Exception("Invalid destination path");
+        }
+
+        if (! file_exists($destination)) {
+            $omask = umask(0);
+            $action = mkdir($destination, $this->mask, true);
+            umask($omask);
+            if ($action === false) {
+                throw new \Exception("Error creating folder $destination");
+            }
+        }
+
+        if (! is_writable($destination)) {
+            throw new \Exception("Destination path not writable");
+        }
+
+        if (is_array($files) && count($files) != 0) {
+            $fileMatrix = $files;
+        } else {
+            $fileMatrix = $this->getArchiveFiles();
+        }
+
+        if (! empty($this->password)) {
+            $this->zipArchive->setPassword($this->password);
+        }
+
+        $extract = $this->zipArchive->extractTo($destination, $fileMatrix);
+
+        if ($extract === false) {
+            throw new \Exception(self::getStatus($this->zipArchive->status));
+        }
+
+        return true;
+    }
+
     final public function setArchive(ZipArchive $zip) {
         $this->zipArchive = $zip;
         return $this;
+    }
+
+    private function getArchiveFiles(): array
+    {
+        $list = [];
+
+        for ($i = 0; $i < $this->zipArchive->numFiles; $i++) {
+            $file = $this->zipArchive->statIndex($i);
+            if ($file === false) continue;
+            $name = str_replace('\\', '/', $file["name"]);
+            if ($name[0] == "." && in_array($this->skip_mode, ["HIDDEN", "ALL"])) continue;
+            if ($name[0] == "." && @$name[1] == "_" && in_array($this->skip_mode, ["AWERAM", "ALL"])) continue;
+            $list[] = $name;
+        }
+
+        return $list;
     }
 
     /**

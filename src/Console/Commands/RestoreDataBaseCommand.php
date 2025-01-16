@@ -10,13 +10,12 @@ use Symfony\Component\Process\Process;
 
 class RestoreDataBaseCommand extends Command
 {
-    const FILE_NAME = "backup.sql";
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = "restore:db {table?} {--file=" . self::FILE_NAME . "}";
+    protected $signature = "restore:db {table?} {--file=" . BackupDataBaseCommand::FILE_NAME . "}";
 
     /**
      * The console command description.

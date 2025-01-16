@@ -6,4 +6,6 @@ return [
     "bucket" => env("YANDEX_CLOUD_BUCKET", ""),
     "region" => env("YANDEX_CLOUD_REGION", ""),
     "folder" => env("YANDEX_CLOUD_FOLDER", ""),
+
+    "exceptionItems" => ["livewire-tmp", ".gitignore"],
 ];
