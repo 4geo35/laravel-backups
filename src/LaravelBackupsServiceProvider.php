@@ -3,6 +3,7 @@
 namespace GIS\LaravelBackups;
 
 use GIS\LaravelBackups\Console\Commands\BackupDataBaseCommand;
+use GIS\LaravelBackups\Console\Commands\RestoreDataBaseCommand;
 use Illuminate\Support\ServiceProvider;
 
 class LaravelBackupsServiceProvider extends ServiceProvider
@@ -11,6 +12,7 @@ class LaravelBackupsServiceProvider extends ServiceProvider
     {
         $this->commands([
             BackupDataBaseCommand::class,
+            RestoreDataBaseCommand::class,
         ]);
         // Export config
         $this->publishes([
