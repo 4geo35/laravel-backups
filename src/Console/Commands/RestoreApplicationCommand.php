@@ -51,7 +51,10 @@ class RestoreApplicationCommand extends Command
                 if (empty($s3Folder)) {
                     $s3Folder = config("laravel-backups.folder");
                 }
-                // TODO: pull
+                $this->callSilent("backup:pull", [
+                    "period" => $period,
+                    "--folder" => $s3Folder,
+                ]);
             }
         }
 
