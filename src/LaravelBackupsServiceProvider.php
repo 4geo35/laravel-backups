@@ -2,6 +2,7 @@
 
 namespace GIS\LaravelBackups;
 
+use GIS\LaravelBackups\Console\Commands\BackupApplicationCommand;
 use GIS\LaravelBackups\Console\Commands\BackupDataBaseCommand;
 use GIS\LaravelBackups\Console\Commands\BackupStorageCommand;
 use GIS\LaravelBackups\Console\Commands\RestoreDataBaseCommand;
@@ -19,6 +20,8 @@ class LaravelBackupsServiceProvider extends ServiceProvider
 
             BackupStorageCommand::class,
             RestoreStorageCommand::class,
+
+            BackupApplicationCommand::class,
         ]);
         // Export config
         $this->publishes([
