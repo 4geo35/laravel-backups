@@ -92,7 +92,11 @@ class BackupApplicationCommand extends Command
                 if (empty($s3Folder)) {
                     $s3Folder = config("laravel-backups.folder");
                 }
-                // TODO: push
+                $this->callSilent("backup:push", [
+                    "period" => $period,
+                    "--from-current" => true,
+                    "--folder" => $s3Folder,
+                ]);
             }
 
             $this->info("Backup {$period} created successfully");
