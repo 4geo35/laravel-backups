@@ -54,5 +54,8 @@ class LaravelBackupsServiceProvider extends ServiceProvider
         $this->app->singleton("zip-actions", function () {
             return new ZipActionsManager;
         });
+        // Routes
+        $this->loadRoutesFrom(__DIR__ . "/routes/api.php");
+        $this->loadRoutesFrom(__DIR__ . "/routes/admin.php");
     }
 }
