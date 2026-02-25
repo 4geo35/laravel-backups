@@ -20,8 +20,18 @@ use League\Flysystem\Filesystem;
 
 class LaravelBackupsServiceProvider extends ServiceProvider
 {
+    public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__ . "/config/laravel-backups.php", "laravel-backups");
+
+        $this->initFacades();
+    }
+
     public function boot(): void
     {
+        $this->loadRoutesFrom(__DIR__ . "/routes/api.php");
+        $this->loadRoutesFrom(__DIR__ . "/routes/admin.php");
+
         $this->commands([
             BackupDataBaseCommand::class,
             RestoreDataBaseCommand::class,
@@ -55,19 +65,11 @@ class LaravelBackupsServiceProvider extends ServiceProvider
         $this->extendStorage();
     }
 
-    public function register(): void
+    protected function initFacades(): void
     {
-        // Configuration
-        $this->mergeConfigFrom(
-            __DIR__ . "/config/laravel-backups.php", "laravel-backups"
-        );
-        // Facades
         $this->app->singleton("zip-actions", function () {
             return new ZipActionsManager;
         });
-        // Routes
-        $this->loadRoutesFrom(__DIR__ . "/routes/api.php");
-        $this->loadRoutesFrom(__DIR__ . "/routes/admin.php");
     }
 
     protected function extendStorage(): void
