@@ -81,7 +81,7 @@ class RestoreApplicationCommand extends Command
             Storage::disk("backups")->delete($fileName);
 
             $this->callSilent("restore:db");
-            $this->callSilent("restore:storage");
+            if (! config("laravel-backups.withoutStorage")) { $this->callSilent("restore:storage"); }
 
             $this->callSilent("cache:clear");
 

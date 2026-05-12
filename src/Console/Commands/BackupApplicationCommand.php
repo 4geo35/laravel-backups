@@ -31,10 +31,12 @@ class BackupApplicationCommand extends Command
      */
     public function handle()
     {
-        $this->callSilent("backup:storage");
-        if (! Storage::disk("backups")->exists(BackupStorageCommand::FILE_NAME)) {
-            $this->error("Backup storage failed");
-            return;
+        if (! config("laravel-backups.withoutStorage")) {
+            $this->callSilent("backup:storage");
+            if (! Storage::disk("backups")->exists(BackupStorageCommand::FILE_NAME)) {
+                $this->error("Backup storage failed");
+                return;
+            }
         }
 
         $this->callSilent("backup:db");

@@ -8,4 +8,6 @@ return [
     "folder" => env("YANDEX_CLOUD_FOLDER", ""),
 
     "exceptionItems" => ["livewire-tmp", ".gitignore"],
+
+    "withoutStorage" => env("YANDEX_CLOUD_WITHOUT_STORAGE", false),
 ];
